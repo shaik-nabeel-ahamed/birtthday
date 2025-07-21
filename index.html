@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Ma'am</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', cursive, sans-serif;
+      background: url('https://i.imgur.com/OHnd7JU.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .container {
+      position: relative;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+
+    .cake {
+      width: 200px;
+      height: 150px;
+      background: #ff69b4;
+      border-radius: 10px 10px 0 0;
+      position: relative;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .candle {
+      width: 10px;
+      height: 40px;
+      background: white;
+      position: absolute;
+      top: -40px;
+      border-radius: 2px;
+    }
+
+    .candle:nth-child(1) { left: 50px; }
+    .candle:nth-child(2) { left: 95px; }
+    .candle:nth-child(3) { left: 140px; }
+
+    .flame {
+      width: 10px;
+      height: 15px;
+      background: orange;
+      border-radius: 50%;
+      position: absolute;
+      top: -15px;
+      left: 0;
+      display: none;
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.2); opacity: 0.6; }
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #d81b60;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 20px;
+      z-index: 10;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .music-control {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      padding: 10px 15px;
+      font-size: 16px;
+      background: rgba(255, 105, 180, 0.9);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: background 0.3s ease;
+      z-index: 20;
+    }
+
+    .music-control:hover {
+      background: #ff4081;
+    }
+
+    .message-wrapper {
+      position: absolute;
+      top: 20%;
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .message, .message2 {
+      width: 100%;
+      text-align: center;
+      font-size: 24px;
+      color: #6a1b9a;
+      background: rgba(255,255,255,0.85);
+      padding: 20px;
+      border-radius: 15px;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      font-family: 'Lucida Handwriting', cursive;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .message2 {
+      font-size: 22px;
+      color: #880e4f;
+    }
+
+    .visible {
+      opacity: 1;
+    }
+
+    .glow {
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #f06292, 0 0 20px #f06292; }
+      to   { box-shadow: 0 0 20px #f8bbd0, 0 0 30px #f8bbd0; }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 30px;
+      height: 40px;
+      background-color: #ff4081;
+      border-radius: 50%;
+      animation: floatUp 8s ease-in-out infinite;
+    }
+
+    @keyframes floatUp {
+      0% { bottom: -50px; transform: translateX(0) rotate(0deg); }
+      50% { transform: translateX(50px) rotate(10deg); }
+      100% { bottom: 100vh; transform: translateX(-50px) rotate(-10deg); }
+    }
+
+    .petal {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: pink;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: fall 10s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { top: -20px; transform: rotate(0deg); }
+      100% { top: 100vh; transform: rotate(360deg); }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: yellow;
+      border-radius: 50%;
+      box-shadow: 0 0 8px yellow;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+  </style>
+</head>
+<body>
+
+<audio id="birthdayAudio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+
+<div class="container">
+  <div id="balloon-container"></div>
+  <div id="petal-container"></div>
+  <div id="sparkle-container"></div>
+
+  <div class="cake">
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+    <div class="candle"><div class="flame"></div></div>
+  </div>
+
+  <button onclick="lightCandles()">Light the Candles 🎂</button>
+
+  <div class="message-wrapper">
+    <div class="message" id="message">
+      Happy Birthday, Ma'am! 🎉<br>
+      May your day be filled with laughter, kindness, and everything as wonderful as you!
+    </div>
+    <div class="message2" id="message2">
+      Here's to a year of great memories, beautiful moments, and endless joy. 🎈
+    </div>
+  </div>
+
+  <button class="music-control" onclick="toggleMusic()" id="musicBtn">Play Music 🎵</button>
+</div>
+
+<script>
+  const audio = document.getElementById("birthdayAudio");
+  const musicBtn = document.getElementById("musicBtn");
+  let isPlaying = false;
+
+  function toggleMusic() {
+    if (isPlaying) {
+      audio.pause();
+      musicBtn.innerText = "Play Music 🎵";
+    } else {
+      audio.play();
+      musicBtn.innerText = "Pause Music ⏸️";
+    }
+    isPlaying = !isPlaying;
+  }
+
+  function lightCandles() {
+    document.querySelectorAll('.flame').forEach(flame => {
+      flame.style.display = 'block';
+    });
+
+    const msg = document.getElementById('message');
+    msg.classList.add('visible', 'glow');
+
+    const msg2 = document.getElementById('message2');
+    setTimeout(() => msg2.classList.add('visible', 'glow'), 2000);
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js';
+    script.onload = () => {
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+    };
+    document.body.appendChild(script);
+  }
+
+  // Balloons
+  const balloonContainer = document.getElementById('balloon-container');
+  for (let i = 0; i < 30; i++) {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+    balloon.style.left = Math.random() * 100 + 'vw';
+    balloon.style.animationDelay = Math.random() * 8 + 's';
+    balloon.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 70%)`;
+    balloonContainer.appendChild(balloon);
+  }
+
+  // Petals
+  const petalContainer = document.getElementById('petal-container');
+  for (let i = 0; i < 50; i++) {
+    const petal = document.createElement('div');
+    petal.classList.add('petal');
+    petal.style.left = Math.random() * 100 + 'vw';
+    petal.style.animationDelay = Math.random() * 10 + 's';
+    petalContainer.appendChild(petal);
+  }
+
+  // Sparkles
+  const sparkleContainer = document.getElementById('sparkle-container');
+  for (let i = 0; i < 40; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
+    sparkle.style.top = Math.random() * 100 + 'vh';
+    sparkle.style.left = Math.random() * 100 + 'vw';
+    sparkle.style.animationDelay = Math.random() * 2 + 's';
+    sparkleContainer.appendChild(sparkle);
+  }
+</script>
+
+</body>
+</html>
